@@ -294,3 +294,23 @@ span.picture {
     border: 0;
   }
 }
+
+/* message */
+
+.my_message {
+  color: red;
+  text-align: right;
+  .gravatar {
+    float: right;
+    margin-right: 10px;
+  }
+}
+
+.other_message {
+  color: blue;
+  text-align: left;
+  .gravatar {
+    float: left;
+    margin-right: 10px;
+  }
+}

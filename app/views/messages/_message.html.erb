@@ -1,0 +1,8 @@
+<li id="message-<%= message.id %>">
+  <%= link_to gravatar_for(message.from_user, size: 50), message.from_user %>
+  <span class="user"><%= link_to message.from_user.name, message.from_user %></span>
+  <span class="message_content"><%= message.content %></span>
+  <span class="message_timestamp">
+    <%= message.created_at %>
+  </span>
+</li>

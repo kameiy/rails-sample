@@ -8,6 +8,12 @@ class User < ApplicationRecord
                                    dependent:   :destroy
   has_many :following, through: :active_relationships, source: :followed
   has_many :followers, through: :passive_relationships, source: :follower
+  has_many :from_messages, class_name: "Message",
+          foreign_key: "from_id"
+  has_many :to_messages, class_name: "Message",
+            foreign_key: "to_id"
+  has_many :sent_messages, through: :from_messages, source: :from
+  has_many :received_messages, through: :to_messages, source: :to
   attr_accessor :remember_token, :activation_token, :reset_token
   before_save   :downcase_email
   before_create :create_activation_digest
@@ -84,6 +90,21 @@ class User < ApplicationRecord
                      OR user_id = :user_id", user_id: id)
   end
   
+  # Send message to other user
+def send_message(other_user, content)
+  from_messages.create!(to_id: other_user.id, content: content)
+end
+  
+  # メッセージがあるユーザを返す
+  def user_with_message
+    ids = "SELECT from_id as id FROM messages WHERE to_id = :user_id UNION SELECT to_id as id FROM messages WHERE from_id = :user_id"
+    User.where("id IN (#{ids}) AND id <> :user_id", user_id: id).uniq
+  end
+  
+  def messages(other_user)
+    Message.where("(from_id = :my_id AND to_id = :other_id) OR (from_id = :other_id AND to_id = :my_id)", my_id: id, other_id: other_user.id)
+  end
+  
   # ユーザーをフォローする
   def follow(other_user)
     active_relationships.create(followed_id: other_user.id)
@@ -97,6 +118,10 @@ class User < ApplicationRecord
   # 現在のユーザーがフォローしてたらtrueを返す
   def following?(other_user)
     following.include?(other_user)
+  end
+  
+  def message(other_id)
+    Message.where("(from_id = :my_id AND to_id = :other_id) OR (from_id = :other_id AND to_id = :my_id)", my_id: id, other_id: other_id)
   end
   
   private

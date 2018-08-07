@@ -1,0 +1,40 @@
+<% provide(:title, 'Messages') %>
+<h1>Messages</h1>
+
+<div class="messages">
+  <% if @messages.any? %>
+    <ol class="microposts">
+      <% @messages.each do |message| %>
+        <% if message.from_id == @from_user.id %>
+          <li id="message-<%= message.id %>" class="my_message" >
+            <%= link_to gravatar_for(message.from_user, size: 20), message.from_user %>
+            <span class="user"><%= link_to message.from_user.name, message.from_user %></span>
+            <span class="message_content"><%= message.content %></span>
+            <span class="message_timestamp">
+              <%= message.created_at %>
+            </span>
+          </li>
+        <% else %>
+          <li id="message-<%= message.id %>" class="other_message">
+            <%= link_to gravatar_for(message.from_user, size: 20), message.from_user %>
+            <span class="user"><%= link_to message.from_user.name, message.from_user %></span>
+            <span class="message_content"><%= message.content %></span>
+            <span class="message_timestamp">
+              <%= message.created_at %>
+            </span>
+          </li>
+        <% end %>
+      <% end %>
+    </ol>
+  <% end %>
+</div>
+<div class="message_form">
+  <%= form_for(@message) do |f| %>
+    <%= render 'shared/error_messages', object: f.object %>
+    <div class="field">
+      <%= f.hidden_field :to_id, :value => @to_user.id %>
+      <%= f.text_area :content, placeholder: "Compose new message..." %>
+    </div>
+    <%= f.submit "Send", class: "btn btn-primary" %>
+  <% end %>
+</div>

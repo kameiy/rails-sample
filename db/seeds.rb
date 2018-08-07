@@ -31,3 +31,15 @@ following = users[2..50]
 followers = users[3..40]
 following.each { |followed| user.follow(followed) }
 followers.each { |follower| follower.follow(user) }
+
+# messages
+users = User.all
+user = User.first
+to_users = users[2..10]
+10.times do
+  content = Faker::Lorem.sentence(5)
+  to_users.each do |other_user|
+    user.from_messages.create!(to_id: other_user.id, content: content)
+    other_user.from_messages.create!(to_id: user.id, content: content)
+  end
+end
