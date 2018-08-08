@@ -3,13 +3,13 @@
 
 <div class="messages">
   <% if @messages.any? %>
-    <ol class="microposts">
+    <ol class="messages">
       <% @messages.each do |message| %>
         <% if message.from_id == @from_user.id %>
           <li id="message-<%= message.id %>" class="my_message" >
             <%= link_to gravatar_for(message.from_user, size: 20), message.from_user %>
             <span class="user"><%= link_to message.from_user.name, message.from_user %></span>
-            <span class="message_content"><%= message.content %></span>
+            <span class="message_content balloon2"><%= message.content %></span>
             <span class="message_timestamp">
               <%= message.created_at %>
             </span>
@@ -18,7 +18,7 @@
           <li id="message-<%= message.id %>" class="other_message">
             <%= link_to gravatar_for(message.from_user, size: 20), message.from_user %>
             <span class="user"><%= link_to message.from_user.name, message.from_user %></span>
-            <span class="message_content"><%= message.content %></span>
+            <span class="message_content balloon1"><%= message.content %></span>
             <span class="message_timestamp">
               <%= message.created_at %>
             </span>
