@@ -1,14 +1,16 @@
 require 'test_helper'
 
 class MessagesControllerTest < ActionDispatch::IntegrationTest
-  test "should get index" do
-    get messages_index_url
-    assert_response :success
+  def setup
+    @user = users(:michael)
+    @other_user = users(:archer)
   end
-
-  test "should get show" do
-    get messages_show_url
-    assert_response :success
+  
+  test "should redirect create when not logged in" do
+    assert_no_difference 'Micropost.count' do
+      post messages_path, params: { message: { to_id: @other_user.id, content: "Lorem ipsum" } }
+    end
+    assert_redirected_to login_url
   end
 
 end

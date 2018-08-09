@@ -1,5 +1,5 @@
 class MessagesController < ApplicationController
-  before_action :logged_in_user, only: [:index, :show, :creaete]
+  before_action :logged_in_user, only: [:index, :show, :create]
   def index
     @users = current_user.user_with_message
   end
@@ -9,6 +9,7 @@ class MessagesController < ApplicationController
     @to_user = User.find_by(id: params[:id])
     @messages = @from_user.messages(@to_user)
     @message = current_user.from_messages.build()
+    render 'show'
   end
   
   def create
@@ -18,7 +19,8 @@ class MessagesController < ApplicationController
       redirect_to "/messages/#{@message.to_id}"
     else
       flash.now[:danger] = 'failed to send message'
-      redirect_back_or root_url
+      params[:id] = @message.to_id
+      show
     end
   end
   

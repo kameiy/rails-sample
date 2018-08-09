@@ -1,11 +1,21 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-# one:
-#   from_id: 1
-#   to_id: 1
-#   content: MyText
+one:
+  from_user: michael
+  to_user: lana
+  content: 'hello lana'
 
-# two:
-#   from_id: 1
-#   to_id: 1
-#   content: MyText
+two:
+  from_user: lana
+  to_user: michael
+  content: 'fuck'
+
+one:
+  from_user: archer
+  to_user: lana
+  content: 'hello lana'
+
+two:
+  from_user: archer
+  to_user: michael
+  content: 'omg'
